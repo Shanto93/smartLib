@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
         Component: AllBooks,
       },
       {
-        path: "/addBook",
+        path: "/create-book",
         Component: AddBook,
       },
     ],

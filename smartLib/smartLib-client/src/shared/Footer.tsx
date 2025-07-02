@@ -114,11 +114,8 @@ const Footer = () => {
           <a href="/books" className="hover:text-[#18dcff] transition">
             Books
           </a>
-          <a href="/addBook" className="hover:text-[#18dcff] transition">
+          <a href="/create-book" className="hover:text-[#18dcff] transition">
             Add Book
-          </a>
-          <a href="/contact" className="hover:text-[#18dcff] transition">
-            Contact
           </a>
         </div>
 
