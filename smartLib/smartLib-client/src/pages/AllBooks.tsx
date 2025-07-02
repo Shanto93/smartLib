@@ -15,14 +15,15 @@ import {
 import LoadingPage from "@/components/ui/LoadingPage";
 import { Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const AllBooks = () => {
   const { data: allBooks, isLoading } = useGetAllBooksQuery();
   const [deleteBook] = useDeleteBookMutation();
+  const navigate = useNavigate();
 
   const handleEdit = (bookId: string) => {
-    console.log("Edit book:", bookId);
-    // Navigate to edit page or open modal
+    navigate(`/edit-book/${bookId}`);
   };
 
   const handleDelete = async (bookId: string, title: string) => {
