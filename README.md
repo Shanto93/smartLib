@@ -6,8 +6,8 @@ SmartLib is a full-stack Library Management System built with modern technologie
 ## Live Demo
 
 You can access the live project here:  
-[SmartLib - Frontend](https://smart-lib-ruby.vercel.app/)
-[SmartLib - Backend](https://library-management-eta-rose.vercel.app/)
+- [SmartLib - Frontend](https://smart-lib-ruby.vercel.app/)
+- [SmartLib - Backend](https://library-management-eta-rose.vercel.app/)
 
 ## Features
 
