@@ -1,147 +1,7 @@
-// import { useGetAllBooksQuery } from "@/redux/api/baseApi";
-// import type { IBook } from "@/types";
-// import {
-//   Table,
-//   TableBody,
-//   TableCaption,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table";
-// import LoadingPage from "@/components/ui/LoadingPage";
-// import { Pencil, Trash2 } from "lucide-react";
-
-// const AllBooks = () => {
-//   const { data: allBooks, isLoading } = useGetAllBooksQuery(undefined);
-
-//   const handleEdit = (bookId: string | undefined) => {
-//     console.log("Edit book:", bookId);
-//     // Navigate to edit page or open modal
-//     // Example: router.push(`/dashboard/edit-book/${bookId}`)
-//   };
-
-//   const handleDelete = (bookId: string | undefined) => {
-//     const confirm = window.confirm(
-//       "Are you sure you want to delete this book?"
-//     );
-//     if (confirm) {
-//       console.log("Delete book:", bookId);
-//       // Call mutation (e.g. useDeleteBookMutation)
-//     }
-//   };
-
-//   if (isLoading) {
-//     return <LoadingPage />;
-//   }
-
-//   return (
-//     <div className="p-4 md:p-10 bg-gradient-to-br from-indigo-50 to-purple-100 min-h-screen">
-//       <h2 className="text-2xl font-bold text-center mb-8 text-indigo-800">
-//         📚 All Books
-//       </h2>
-
-//       <div className="overflow-x-auto shadow-lg rounded-xl bg-white">
-//         <Table className="w-full text-sm text-left text-gray-700">
-//           <TableCaption className="text-gray-500 mt-2 italic">
-//             A list of all books in the system.
-//           </TableCaption>
-//           <TableHeader className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-//             <TableRow>
-//               <TableHead className="text-center">SL No</TableHead>
-//               <TableHead className="text-center">Title</TableHead>
-//               <TableHead className="text-center">Description</TableHead>
-//               <TableHead className="text-center">Author</TableHead>
-//               <TableHead className="text-center">Genre</TableHead>
-//               <TableHead className="text-center">ISBN</TableHead>
-//               <TableHead className="text-center">Copies</TableHead>
-//               <TableHead className="text-center">Available</TableHead>
-//               <TableHead className="text-center">Edit</TableHead>
-//               <TableHead className="text-center">Delete</TableHead>
-//             </TableRow>
-//           </TableHeader>
-
-//           <TableBody>
-//             {allBooks?.data?.map((book: IBook, index: number) => (
-//               <TableRow
-//                 key={book._id}
-//                 className={`hover:bg-indigo-50 transition duration-300 ${
-//                   index % 2 === 0 ? "bg-white" : "bg-gray-50"
-//                 }`}
-//               >
-//                 <TableCell className="text-center font-semibold">
-//                   {index + 1}
-//                 </TableCell>
-//                 <TableCell className="text-center font-semibold text-indigo-700">
-//                   {book.title}
-//                 </TableCell>
-//                 <TableCell className="text-center">
-//                   {book.description}
-//                 </TableCell>
-//                 <TableCell className="text-center">{book.author}</TableCell>
-//                 <TableCell className="text-center">{book.genre}</TableCell>
-//                 <TableCell className="text-center">{book.isbn}</TableCell>
-//                 <TableCell className="text-center">{book.copies}</TableCell>
-//                 <TableCell className="text-center">
-//                   <span
-//                     className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-//                       book.available
-//                         ? "bg-green-100 text-green-700"
-//                         : "bg-red-100 text-red-700"
-//                     }`}
-//                   >
-//                     {book.available ? "Yes" : "No"}
-//                   </span>
-//                 </TableCell>
-
-//                 {/* Edit Button */}
-//                 <TableCell className="text-center">
-//                   <button
-//                     onClick={() => handleEdit(book._id)}
-//                     className="text-blue-600 hover:text-blue-800 transition"
-//                     title="Edit"
-//                   >
-//                     <Pencil className="w-5 h-5 inline" />
-//                   </button>
-//                 </TableCell>
-
-//                 {/* Delete Button */}
-//                 <TableCell className="text-center">
-//                   <button
-//                     onClick={() => handleDelete(book._id)}
-//                     className="text-red-600 hover:text-red-800 transition"
-//                     title="Delete"
-//                   >
-//                     <Trash2 className="w-5 h-5 inline" />
-//                   </button>
-//                 </TableCell>
-//               </TableRow>
-//             ))}
-//           </TableBody>
-//         </Table>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AllBooks;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import { useGetAllBooksQuery } from "@/redux/api/baseApi";
+import {
+  useDeleteBookMutation,
+  useGetAllBooksQuery,
+} from "@/redux/api/baseApi";
 import type { IBook } from "@/types";
 import {
   Table,
@@ -154,20 +14,29 @@ import {
 } from "@/components/ui/table";
 import LoadingPage from "@/components/ui/LoadingPage";
 import { Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 const AllBooks = () => {
-  const { data: allBooks, isLoading } = useGetAllBooksQuery(undefined);
+  const { data: allBooks, isLoading } = useGetAllBooksQuery();
+  const [deleteBook] = useDeleteBookMutation();
 
-  const handleEdit = (bookId: string | undefined) => {
+  const handleEdit = (bookId: string) => {
     console.log("Edit book:", bookId);
     // Navigate to edit page or open modal
   };
 
-  const handleDelete = (bookId: string | undefined) => {
-    const confirm = window.confirm("Are you sure you want to delete this book?");
+  const handleDelete = async (bookId: string, title: string) => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this book?"
+    );
     if (confirm) {
-      console.log("Delete book:", bookId);
-      // Call delete mutation
+      const res = await deleteBook(bookId);
+      console.log(res);
+      if (res.data?.success === true) {
+        toast.success(`${title} Deleted Successfully`);
+      } else {
+        toast.error("Error deleting book");
+      }
     }
   };
 
@@ -182,7 +51,9 @@ const AllBooks = () => {
 
   return (
     <div className="p-4 md:p-10 bg-gradient-to-br from-indigo-50 to-purple-100 min-h-screen">
-      <h2 className="text-2xl font-bold text-center mb-8 text-indigo-800">📚 All Books</h2>
+      <h2 className="text-2xl font-bold text-center mb-8 text-indigo-800">
+        📚 All Books
+      </h2>
 
       <div className="overflow-x-auto shadow-lg rounded-xl bg-white">
         <Table className="w-full text-sm text-left text-gray-700">
@@ -194,12 +65,16 @@ const AllBooks = () => {
             <TableRow>
               <TableHead className="text-center text-white">SL No</TableHead>
               <TableHead className="text-center text-white">Title</TableHead>
-              <TableHead className="text-center text-white">Description</TableHead>
+              <TableHead className="text-center text-white">
+                Description
+              </TableHead>
               <TableHead className="text-center text-white">Author</TableHead>
               <TableHead className="text-center text-white">Genre</TableHead>
               <TableHead className="text-center text-white">ISBN</TableHead>
               <TableHead className="text-center text-white">Copies</TableHead>
-              <TableHead className="text-center text-white">Available</TableHead>
+              <TableHead className="text-center text-white">
+                Available
+              </TableHead>
               <TableHead className="text-center text-white">Borrow</TableHead>
               <TableHead className="text-center text-white">Edit</TableHead>
               <TableHead className="text-center text-white">Delete</TableHead>
@@ -214,9 +89,15 @@ const AllBooks = () => {
                   index % 2 === 0 ? "bg-white" : "bg-gray-50"
                 }`}
               >
-                <TableCell className="text-center font-semibold">{index + 1}</TableCell>
-                <TableCell className="text-center font-semibold text-indigo-700">{book.title}</TableCell>
-                <TableCell className="text-center">{book.description}</TableCell>
+                <TableCell className="text-center font-semibold">
+                  {index + 1}
+                </TableCell>
+                <TableCell className="text-center font-semibold text-indigo-700">
+                  {book.title}
+                </TableCell>
+                <TableCell className="text-center">
+                  {book.description}
+                </TableCell>
                 <TableCell className="text-center">{book.author}</TableCell>
                 <TableCell className="text-center">{book.genre}</TableCell>
                 <TableCell className="text-center">{book.isbn}</TableCell>
@@ -251,7 +132,7 @@ const AllBooks = () => {
                 {/* Edit Button */}
                 <TableCell className="text-center">
                   <button
-                    onClick={() => handleEdit(book._id)}
+                    onClick={() => book._id && handleEdit(book._id)}
                     className="text-blue-600 hover:text-blue-800 transition"
                     title="Edit"
                   >
@@ -262,7 +143,9 @@ const AllBooks = () => {
                 {/* Delete Button */}
                 <TableCell className="text-center">
                   <button
-                    onClick={() => handleDelete(book._id)}
+                    onClick={() =>
+                      book._id && handleDelete(book._id, book.title)
+                    }
                     className="text-red-600 hover:text-red-800 transition"
                     title="Delete"
                   >
