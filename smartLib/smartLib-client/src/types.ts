@@ -14,3 +14,17 @@ export interface IBook {
   copies: number;
   available?: boolean;
 }
+
+export interface IBorrow {
+  book: string;
+  quantity: number;
+  dueDate: string;
+}
+
+export interface IError {
+  data: {
+    error: string;
+    message: string;
+    success: boolean;
+  };
+}

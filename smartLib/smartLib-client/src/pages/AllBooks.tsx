@@ -13,12 +13,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import LoadingPage from "@/components/ui/LoadingPage";
-import { Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 
 const AllBooks = () => {
-  const { data: allBooks, isLoading } = useGetAllBooksQuery();
+  const { data: allBooks, isLoading } = useGetAllBooksQuery(undefined, {
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
+  });
   const [deleteBook] = useDeleteBookMutation();
   const navigate = useNavigate();
 
@@ -43,7 +47,11 @@ const AllBooks = () => {
 
   const handleBorrow = (bookId: string | undefined) => {
     console.log("Borrow book:", bookId);
-    // Call borrow logic or open borrow modal
+    navigate(`/borrow/${bookId}`);
+  };
+
+  const handleView = (bookId: string) => {
+    navigate(`/books/${bookId}`);
   };
 
   if (isLoading) {
@@ -76,6 +84,7 @@ const AllBooks = () => {
               <TableHead className="text-center text-white">
                 Available
               </TableHead>
+              <TableHead className="text-center text-white">View</TableHead>
               <TableHead className="text-center text-white">Borrow</TableHead>
               <TableHead className="text-center text-white">Edit</TableHead>
               <TableHead className="text-center text-white">Delete</TableHead>
@@ -113,6 +122,17 @@ const AllBooks = () => {
                   >
                     {book.available ? "Yes" : "No"}
                   </span>
+                </TableCell>
+
+                {/* View Button */}
+                <TableCell className="text-center">
+                  <button
+                    onClick={() => book._id && handleView(book._id)}
+                    className="text-indigo-600 hover:text-indigo-800 transition"
+                    title="View Details"
+                  >
+                    <Eye className="w-5 h-5 inline" />
+                  </button>
                 </TableCell>
 
                 {/* Borrow Button */}
