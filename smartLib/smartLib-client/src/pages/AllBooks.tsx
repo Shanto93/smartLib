@@ -16,13 +16,20 @@ import LoadingPage from "@/components/ui/LoadingPage";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { useState } from "react";
 
 const AllBooks = () => {
-  const { data: allBooks, isLoading } = useGetAllBooksQuery(undefined, {
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true,
-    refetchOnReconnect: true,
-  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 10;
+
+  const { data: allBooks, isLoading } = useGetAllBooksQuery(
+    { page: currentPage, limit },
+    {
+      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true,
+      refetchOnReconnect: true,
+    }
+  );
   const [deleteBook] = useDeleteBookMutation();
   const navigate = useNavigate();
 
@@ -36,9 +43,9 @@ const AllBooks = () => {
     );
     if (confirm) {
       const res = await deleteBook(bookId);
-      console.log(res);
       if (res.data?.success === true) {
         toast.success(`${title} Deleted Successfully`);
+        setCurrentPage(1);
       } else {
         toast.error("Error deleting book");
       }
@@ -46,7 +53,6 @@ const AllBooks = () => {
   };
 
   const handleBorrow = (bookId: string | undefined) => {
-    console.log("Borrow book:", bookId);
     navigate(`/borrow/${bookId}`);
   };
 
@@ -100,7 +106,7 @@ const AllBooks = () => {
                 }`}
               >
                 <TableCell className="text-center font-semibold">
-                  {index + 1}
+                  {(currentPage - 1) * limit + index + 1}
                 </TableCell>
                 <TableCell className="text-center font-semibold text-indigo-700">
                   {book.title}
@@ -123,8 +129,6 @@ const AllBooks = () => {
                     {book.available ? "Yes" : "No"}
                   </span>
                 </TableCell>
-
-                {/* View Button */}
                 <TableCell className="text-center">
                   <button
                     onClick={() => book._id && handleView(book._id)}
@@ -134,8 +138,6 @@ const AllBooks = () => {
                     <Eye className="w-5 h-5 inline" />
                   </button>
                 </TableCell>
-
-                {/* Borrow Button */}
                 <TableCell className="text-center">
                   <button
                     onClick={() => handleBorrow(book._id)}
@@ -149,8 +151,6 @@ const AllBooks = () => {
                     Borrow
                   </button>
                 </TableCell>
-
-                {/* Edit Button */}
                 <TableCell className="text-center">
                   <button
                     onClick={() => book._id && handleEdit(book._id)}
@@ -160,8 +160,6 @@ const AllBooks = () => {
                     <Pencil className="w-5 h-5 inline" />
                   </button>
                 </TableCell>
-
-                {/* Delete Button */}
                 <TableCell className="text-center">
                   <button
                     onClick={() =>
@@ -178,6 +176,34 @@ const AllBooks = () => {
           </TableBody>
         </Table>
       </div>
+
+      {allBooks?.meta &&
+        typeof allBooks.meta.totalPages === "number" &&
+        allBooks.meta.totalPages > 1 && (
+          <div className="flex justify-center mt-6 gap-4">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-indigo-500 text-white rounded disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <span className="self-center font-semibold">
+              Page {currentPage} of {allBooks.meta.totalPages}
+            </span>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) =>
+                  prev < (allBooks.meta?.totalPages ?? 1) ? prev + 1 : prev
+                )
+              }
+              disabled={currentPage === allBooks.meta.totalPages}
+              className="px-4 py-2 bg-indigo-500 text-white rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
     </div>
   );
 };

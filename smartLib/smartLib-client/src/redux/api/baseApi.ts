@@ -6,9 +6,20 @@ export const baseApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api/books" }),
   tagTypes: ["Book", "Borrow"],
   endpoints: (build) => ({
-    // GET all books
-    getAllBooks: build.query<{ success: boolean; data: IBook[] }, void>({
-      query: () => "/",
+    getAllBooks: build.query<
+      {
+        success: boolean;
+        data: IBook[];
+        meta: {
+          total: number;
+          page: number;
+          limit: number;
+          totalPages: number;
+        };
+      },
+      { page?: number; limit?: number } | void
+    >({
+      query: ({ page = 1, limit = 10 } = {}) => `/?page=${page}&limit=${limit}`,
       providesTags: ["Book"],
     }),
 
@@ -62,4 +73,3 @@ export const {
   useDeleteBookMutation,
   useUpdateBookMutation,
 } = baseApi;
-

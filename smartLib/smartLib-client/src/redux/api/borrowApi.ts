@@ -18,11 +18,12 @@ export const borrowApi = createApi({
       }),
       invalidatesTags: (result, error, arg) => [
         "Borrow",
-        { type: "Book", id: arg.book }, 
+        { type: "Book", id: arg.book },
       ],
     }),
 
-    // GET borrow summary
+    // Borrow Summary
+
     getBorrowSummary: build.query<
       {
         success: boolean;
@@ -30,10 +31,15 @@ export const borrowApi = createApi({
           book: { title: string; isbn: string };
           totalQuantity: number;
         }[];
+        meta: {
+          totalItems: number;
+          currentPage: number;
+          totalPages: number;
+        };
       },
-      void
+      { page: number; limit: number }
     >({
-      query: () => "/borrow",
+      query: ({ page, limit }) => `/borrow?page=${page}&limit=${limit}`,
       providesTags: ["Borrow"],
     }),
   }),

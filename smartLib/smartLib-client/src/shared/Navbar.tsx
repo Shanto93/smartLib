@@ -37,6 +37,9 @@ const Navbar = () => {
             <NavLink to="/create-book" className={navLinkClass}>
               Add Book
             </NavLink>
+            <NavLink to="/borrow-summary" className={navLinkClass}>
+              Borrow Summary
+            </NavLink>
           </div>
 
           {/* Mobile Menu Button */}
@@ -74,6 +77,13 @@ const Navbar = () => {
             onClick={() => setIsOpen(false)}
           >
             Add Book
+          </NavLink>
+          <NavLink
+            to="/borrow-summary"
+            className={navLinkClass}
+            onClick={() => setIsOpen(false)}
+          >
+            Borrow Summary
           </NavLink>
         </div>
       )}
