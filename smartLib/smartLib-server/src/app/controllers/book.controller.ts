@@ -24,31 +24,76 @@ bookRoutes.post("/", async (req: Request, res: Response) => {
 });
 
 // GET all books
+// bookRoutes.get("/", async (req: Request, res: Response) => {
+//   const filter = req.query.filter as string | undefined;
+//   const sortBy = req.query.sortBy as string | undefined;
+//   const sort = req.query.sort as string | undefined;
+//   const limit = parseInt(req.query.limit as string) || 100;
+
+//   try {
+//     const parsedLimit = Number(limit);
+//     const book = await Book.find(filter ? { genre: filter } : {})
+//       .sort(
+//         sortBy && (sort === "asc" || sort === "desc")
+//           ? { [sortBy]: sort === "desc" ? -1 : 1 }
+//           : {}
+//       )
+//       .limit(!isNaN(parsedLimit) ? parsedLimit : 100);
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Books retrieved successfully",
+//       data: book,
+//     });
+//   } catch (error: any) {
+//     handleValidationError(error, res, "Error fetching books");
+//   }
+// });
+
+
+
 bookRoutes.get("/", async (req: Request, res: Response) => {
   const filter = req.query.filter as string | undefined;
   const sortBy = req.query.sortBy as string | undefined;
   const sort = req.query.sort as string | undefined;
   const limit = parseInt(req.query.limit as string) || 10;
+  const page = parseInt(req.query.page as string) || 1;
 
   try {
-    const parsedLimit = Number(limit);
-    const book = await Book.find(filter ? { genre: filter } : {})
+    const skip = (page - 1) * limit;
+
+    const query = filter ? { genre: filter } : {};
+
+    const books = await Book.find(query)
       .sort(
         sortBy && (sort === "asc" || sort === "desc")
           ? { [sortBy]: sort === "desc" ? -1 : 1 }
           : {}
       )
-      .limit(!isNaN(parsedLimit) ? parsedLimit : 10);
+      .skip(skip)
+      .limit(limit);
+
+    const totalBooks = await Book.countDocuments(query);
 
     res.status(200).json({
       success: true,
       message: "Books retrieved successfully",
-      data: book,
+      data: books,
+      meta: {
+        total: totalBooks,
+        page,
+        limit,
+        totalPages: Math.ceil(totalBooks / limit),
+      },
     });
   } catch (error: any) {
     handleValidationError(error, res, "Error fetching books");
   }
 });
+
+
+
+
 // GET a sngle book
 bookRoutes.get("/:bookId", async (req: Request, res: Response) => {
   const bookId = req.params.bookId;

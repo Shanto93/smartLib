@@ -42,11 +42,16 @@ borrowRoutes.post("/", async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-
 // Borrowed Books Aggregation
+
 borrowRoutes.get("/", async (req: Request, res: Response): Promise<void> => {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 10;
+  const skip = (page - 1) * limit;
+
   try {
-    const summary = await Borrow.aggregate([
+    // Full aggregation pipeline
+    const aggregationPipeline = [
       {
         $group: {
           _id: "$book",
@@ -69,15 +74,34 @@ borrowRoutes.get("/", async (req: Request, res: Response): Promise<void> => {
             isbn: "$bookDetails.isbn",
           },
           totalQuantity: 1,
-          _id: false
+          _id: false,
         },
       },
-    ]);
+    ];
+
+    // Clone the pipeline to count total documents BEFORE pagination
+    const totalResult = await Borrow.aggregate(aggregationPipeline);
+    const totalCount = totalResult.length;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    // Add pagination to pipeline
+    const paginatedPipeline = [
+      ...aggregationPipeline,
+      { $skip: skip },
+      { $limit: limit },
+    ];
+
+    const paginatedResult = await Borrow.aggregate(paginatedPipeline);
 
     res.status(200).json({
       success: true,
       message: "Borrowed books summary retrieved successfully",
-      data: summary,
+      data: paginatedResult,
+      meta: {
+        totalItems: totalCount,
+        currentPage: page,
+        totalPages,
+      },
     });
   } catch (error: any) {
     handleValidationError(error, res, "Error fetching borrow summary");
