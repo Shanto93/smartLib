@@ -1,95 +1,3 @@
-// import logo from "../assets/smartlib.svg";
-
-// const Footer = () => {
-//   return (
-//     <footer className="bg-[#5e17eb] text-white pt-10 pb-6 px-6 sm:px-10 lg:px-20">
-//       <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-//         {/* Logo + Description */}
-//         <div>
-//           <div className="flex items-center space-x-2 mb-4">
-//             <img
-//               src={logo}
-//               alt="SmartLib Logo"
-//               className="w-16 sm:w-20 md:w-24 h-auto object-contain"
-//             />
-//             <span className="text-xl font-bold tracking-wide">SmartLib</span>
-//           </div>
-//           <p className="text-sm text-white/80 leading-relaxed">
-//             A smarter way to manage your library. Discover, organize, and
-//             read—all in one place.
-//           </p>
-//         </div>
-
-//         {/* Quick Links */}
-//         <div>
-//           <h4 className="text-lg font-semibold mb-3 text-[#18dcff]">
-//             Quick Links
-//           </h4>
-//           <ul className="space-y-2 text-sm text-white/90">
-//             <li>
-//               <a href="/" className="hover:text-[#18dcff] transition">
-//                 Home
-//               </a>
-//             </li>
-//             <li>
-//               <a href="/books" className="hover:text-[#18dcff] transition">
-//                 All Books
-//               </a>
-//             </li>
-//             <li>
-//               <a href="/addBook" className="hover:text-[#18dcff] transition">
-//                 Add Book
-//               </a>
-//             </li>
-
-//           </ul>
-//         </div>
-
-//         {/* Resources */}
-//         <div>
-//           <h4 className="text-lg font-semibold mb-3 text-[#18dcff]">
-//             Resources
-//           </h4>
-//           <ul className="space-y-2 text-sm text-white/90">
-//             <li>
-//               <a href="#" className="hover:text-[#18dcff] transition">
-//                 Privacy Policy
-//               </a>
-//             </li>
-//             <li>
-//               <a href="#" className="hover:text-[#18dcff] transition">
-//                 Terms of Use
-//               </a>
-//             </li>
-//             <li>
-//               <a href="#" className="hover:text-[#18dcff] transition">
-//                 FAQs
-//               </a>
-//             </li>
-//           </ul>
-//         </div>
-
-//         {/* Contact */}
-//         <div>
-//           <h4 className="text-lg font-semibold mb-3 text-[#18dcff]">Contact</h4>
-//           <ul className="space-y-2 text-sm text-white/90">
-//             <li>Email: shantoislam7363@gmail.com</li>
-//             <li>Phone: +8801997266467</li>
-//             <li>Location: Dhaka, Bangladesh</li>
-//           </ul>
-//         </div>
-//       </div>
-
-//       {/* Divider */}
-//       <div className="border-t border-white/10 mt-10 pt-4 text-center text-sm text-white/60">
-//         &copy; {new Date().getFullYear()} SmartLib. All rights reserved.
-//       </div>
-//     </footer>
-//   );
-// };
-
-// export default Footer;
-
 import logo from "../assets/smartlib.svg";
 
 const Footer = () => {
@@ -116,6 +24,9 @@ const Footer = () => {
           </a>
           <a href="/create-book" className="hover:text-[#18dcff] transition">
             Add Book
+          </a>
+          <a href="/borrow-summary" className="hover:text-[#18dcff] transition">
+            Borrow Summary
           </a>
         </div>
 

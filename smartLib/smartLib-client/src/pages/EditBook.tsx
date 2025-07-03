@@ -79,10 +79,10 @@ const EditBook = () => {
         updatedDoc: values,
       }).unwrap();
       if (res.success) {
-        toast.success("Book updated successfully!");
+        toast.success(`${values.title} update successfully!`);
         navigate("/books");
       } else {
-        toast.error("Failed to update book");
+        toast.error(`Failed to update ${values.title}`);
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {

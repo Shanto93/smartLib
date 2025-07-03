@@ -56,7 +56,7 @@ const AddBook = () => {
       const res = await createBook(data).unwrap();
       console.log(res.success === true);
       if (res.success === true) {
-        toast.success("Book added successfully!");
+        toast.success(`${data.title} successfully add to booklist!`);
         form.reset();
         navigate("/books");
       }

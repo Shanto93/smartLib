@@ -5,6 +5,7 @@ export const borrowApi = createApi({
   reducerPath: "borrowApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://library-management-eta-rose.vercel.app/api",
+    // baseUrl: "http://localhost:5000/api",
   }),
   tagTypes: ["Borrow", "Book"],
   endpoints: (build) => ({
