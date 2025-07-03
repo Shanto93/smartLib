@@ -11,7 +11,7 @@ const Banner = () => {
             Welcome to <span className="text-[#18dcff]">SmartLib</span>
           </h1>
           <p className="text-white/80 text-base sm:text-lg leading-relaxed mb-6">
-            Manage your library the smart way. Discover, organize, and track
+            Manage your library the smart way. Add, Edit, Delete and Borrow
             books with ease using our modern digital library system.
           </p>
 

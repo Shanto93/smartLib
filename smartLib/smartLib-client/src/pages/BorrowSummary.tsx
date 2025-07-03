@@ -7,10 +7,13 @@ const BorrowSummary = () => {
   const [page, setPage] = useState(1);
   const limit = 5;
 
-  const { data, isLoading, isError, error } = useGetBorrowSummaryQuery({
-    page,
-    limit,
-  });
+  const { data, isLoading, isError, error } = useGetBorrowSummaryQuery(
+    {
+      page,
+      limit,
+    },
+    { refetchOnMountOrArgChange: true, refetchOnReconnect: true }
+  );
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });

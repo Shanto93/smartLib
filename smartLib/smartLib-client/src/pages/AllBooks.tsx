@@ -67,7 +67,7 @@ const AllBooks = () => {
   return (
     <div className="p-4 md:p-10 bg-gradient-to-br from-indigo-50 to-purple-100 min-h-screen">
       <h2 className="text-2xl font-bold text-center mb-8 text-indigo-800">
-        📚 All Books
+        All Books
       </h2>
 
       <div className="overflow-x-auto shadow-lg rounded-xl bg-white">

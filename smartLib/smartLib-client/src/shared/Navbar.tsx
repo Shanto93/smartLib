@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import logo from "../assets/smartlib.svg";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,16 +15,18 @@ const Navbar = () => {
     <nav className="bg-[#1e1b4b] text-white shadow-xl backdrop-blur-md border-b border-white/10 top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <img
-              className="w-20 sm:w-20 md:w-24 h-auto object-contain"
-              src={logo}
-              alt="SmartLib Logo"
-            />
-            <span className="text-xl md:text-2xl font-bold tracking-wider text-white hover:tracking-widest transition-all duration-300">
-              SmartLib
-            </span>
-          </div>
+          <Link to="/">
+            <div className="flex items-center">
+              <img
+                className="w-20 sm:w-20 md:w-24 h-auto object-contain"
+                src={logo}
+                alt="SmartLib Logo"
+              />
+              <span className="text-xl md:text-2xl font-bold tracking-wider text-white hover:tracking-widest transition-all duration-300">
+                SmartLib
+              </span>
+            </div>
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8 text-lg">
